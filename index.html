@@ -2,118 +2,107 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Download Your Free Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Your Free Guide</title>
     <style>
       body {
         font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: auto;
-        padding: 20px;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
       }
-      .hidden {
-        display: none;
+      .form-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 100%;
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      input[type="text"],
+      input[type="tel"],
+      input[type="date"],
+      input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 15px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #28a745;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .status {
+        text-align: center;
+        margin-top: 15px;
+        color: green;
       }
       .error {
+        text-align: center;
+        margin-top: 15px;
         color: red;
       }
     </style>
   </head>
   <body>
-    <h1>Get Your Free Guide</h1>
-    <button id="fb-login-btn">Login with Facebook</button>
-
-    <div id="form-container" class="hidden">
+    <div class="form-container">
+      <h2>Get Your Free Guide</h2>
       <form id="guide-form">
-        <label for="name">Name:</label><br />
-        <input type="text" id="name" name="name" required /><br /><br />
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
 
-        <label for="email">Email:</label><br />
-        <input type="email" id="email" name="email" required /><br /><br />
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" required />
 
-        <label for="phone">Phone Number:</label><br />
-        <input type="tel" id="phone" name="phone" required /><br /><br />
+        <label for="birthday">Birthday:</label>
+        <input type="date" id="birthday" name="birthday" required />
 
-        <label for="birthday">Birthday:</label><br />
-        <input type="date" id="birthday" name="birthday" required /><br /><br />
-
-        <input type="hidden" id="facebookId" name="facebookId" />
-
-        <button type="submit">Download Guide</button>
+        <button type="submit">Get Ultimate Guide</button>
       </form>
-      <p id="status"></p>
+      <div id="status" class="status"></div>
+      <div id="error" class="error"></div>
     </div>
 
-    <!-- Facebook SDK -->
-    <script
-      async
-      defer
-      crossorigin="anonymous"
-      src="https://connect.facebook.net/en_US/sdk.js"
-    ></script>
-
     <script>
-      // Initialize Facebook SDK
-      window.fbAsyncInit = function () {
-        FB.init({
-          appId: "1275271937046910",
-          cookie: true,
-          xfbml: true,
-          version: "v17.0", // Use the latest version
-        });
-
-        FB.AppEvents.logPageView();
-      };
-
-      document
-        .getElementById("fb-login-btn")
-        .addEventListener("click", function () {
-          FB.login(
-            function (response) {
-              if (response.authResponse) {
-                FB.api(
-                  "/me",
-                  { fields: "name, birthday" },
-                  function (response) {
-                    document.getElementById("name").value = response.name || "";
-                    document.getElementById("birthday").value =
-                      response.birthday
-                        ? response.birthday.split("/").reverse().join("-")
-                        : "";
-                    document.getElementById("facebookId").value =
-                      response.id || "";
-                    document.getElementById("fb-login-btn").style.display =
-                      "none";
-                    document
-                      .getElementById("form-container")
-                      .classList.remove("hidden");
-                  }
-                );
-              } else {
-                alert("User cancelled login or did not fully authorize.");
-              }
-            },
-            { scope: "public_profile,user_birthday,email" }
-          );
-        });
-
       document
         .getElementById("guide-form")
         .addEventListener("submit", function (e) {
           e.preventDefault();
 
+          // Clear previous messages
+          document.getElementById("status").innerText = "";
+          document.getElementById("error").innerText = "";
+
+          // Collect form data
           const data = {
             name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
             phone: document.getElementById("phone").value,
             birthday: document.getElementById("birthday").value,
-            facebookId: document.getElementById("facebookId").value,
           };
 
+          // Send data to Google Apps Script
           fetch(
-            "https://script.google.com/macros/s/AKfycbz8gN4PGwZmnDS3DoVPBcE8JZjTc5Zuh6yVWctQtKTW0yrZkFPPeblsyCVfTnx6kGiwAA/exec",
+            "https://script.google.com/macros/s/AKfycbxEykpMcdJazZAWUbAspEOfiDZHwxok8G_41R_aLJLu7j-SRZJJw-rVq12AspSkHdUyQA/exec",
             {
               method: "POST",
-              mode: "no-cors", // Because Google Apps Script might not have CORS enabled
+              mode: "no-cors", // 'no-cors' to prevent CORS issues
               headers: {
                 "Content-Type": "application/json",
               },
@@ -121,15 +110,17 @@
             }
           )
             .then(() => {
+              // Show success message
               document.getElementById("status").innerText =
                 "Thank you! Your guide is downloading...";
-              // Optionally, redirect to the guide download link
+
+              // Trigger download (ensure the URL points directly to your guide)
               window.location.href =
                 "https://docs.google.com/spreadsheets/d/15WYIa8_JAzYTvhh8ZIMVi-9mkvxSaX6lMQFjpaeluq0/edit?usp=sharing";
             })
             .catch((error) => {
               console.error("Error:", error);
-              document.getElementById("status").innerText =
+              document.getElementById("error").innerText =
                 "An error occurred. Please try again.";
             });
         });
