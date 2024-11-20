@@ -13,6 +13,7 @@
         align-items: center;
         height: 100vh;
         margin: 0;
+        padding: 10px;
       }
       .form-container {
         background-color: #fff;
@@ -21,6 +22,11 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         max-width: 400px;
         width: 100%;
+        box-sizing: border-box;
+      }
+      .form-image {
+        width: 100%;
+        border-radius: 5px 5px 0 0;
       }
       h2 {
         text-align: center;
@@ -35,19 +41,21 @@
         margin: 5px 0 15px 0;
         border: 1px solid #ccc;
         border-radius: 4px;
+        box-sizing: border-box;
       }
       button {
         width: 100%;
         padding: 10px;
-        background-color: #28a745;
+        background-color: #000;
         border: none;
         color: #fff;
         font-size: 16px;
         border-radius: 4px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
       }
       button:hover {
-        background-color: #218838;
+        background-color: #333;
       }
       .status {
         text-align: center;
@@ -59,11 +67,23 @@
         margin-top: 15px;
         color: red;
       }
+      @media screen and (max-width: 480px) {
+        .form-container {
+          padding: 15px;
+        }
+        button {
+          font-size: 14px;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="form-container">
-      <h2>Get Your Free Guide</h2>
+      <img
+        src="https://www.cotstyle.com/cdn/shop/articles/Fashion_Styles_Ultimate_Guide.png?v=1712915461?text=FREE+Fashionista+Professional+TIPS"
+        alt="FREE Fashionista Professional TIPS"
+        class="form-image"
+      />
       <form id="guide-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required />
@@ -74,7 +94,7 @@
         <label for="birthday">Birthday:</label>
         <input type="date" id="birthday" name="birthday" required />
 
-        <button type="submit">Get Ultimate Guide</button>
+        <button type="submit">Download Tips Now</button>
       </form>
       <div id="status" class="status"></div>
       <div id="error" class="error"></div>
@@ -124,19 +144,6 @@
                 "An error occurred. Please try again.";
             });
         });
-
-      function openPopupForm() {
-        const width = 600; // Width of the popup
-        const height = 600; // Height of the popup
-        const left = (window.innerWidth - width) / 2; // Center horizontally
-        const top = (window.innerHeight - height) / 2; // Center vertically
-
-        window.open(
-          "https://mikelshael.github.io/free-guide-form/",
-          "PopupForm",
-          `width=${width},height=${height},top=${top},left=${left}`
-        );
-      }
     </script>
   </body>
 </html>
