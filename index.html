@@ -124,6 +124,19 @@
                 "An error occurred. Please try again.";
             });
         });
+
+      function openPopupForm() {
+        const width = 600; // Width of the popup
+        const height = 600; // Height of the popup
+        const left = (window.innerWidth - width) / 2; // Center horizontally
+        const top = (window.innerHeight - height) / 2; // Center vertically
+
+        window.open(
+          "https://mikelshael.github.io/free-guide-form/",
+          "PopupForm",
+          `width=${width},height=${height},top=${top},left=${left}`
+        );
+      }
     </script>
   </body>
 </html>
